@@ -27,4 +27,9 @@ class Post extends Model
     {
         return $query->where('published', '1');
     }
+
+    public function Tags()
+    {
+        return $this->belongsToMany('App\Tag', 'tag_post');
+    }
 }

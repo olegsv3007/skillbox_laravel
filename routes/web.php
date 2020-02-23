@@ -4,6 +4,8 @@ use App\Http\Controllers;
 
 Route::get('/', 'PostsController@index');
 
+Route::get('/posts/tags/{tag}', 'TagsController@index');
+
 Route::resource('posts', 'PostsController');
 
 Route::get('/contacts', function () {

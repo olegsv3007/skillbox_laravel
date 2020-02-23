@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\PostCreated;
 use App\Http\Requests\UpdatePost;
+use App\Tag;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Requests\StorePost;
@@ -12,7 +13,7 @@ class PostsController extends Controller
 {
     public static function index()
     {
-        $posts = Post::published()->latest()->get();
+        $posts = Post::published()->latest()->with('tags')->get();
         return view('posts.index', compact('posts'));
     }
 
@@ -23,15 +24,21 @@ class PostsController extends Controller
 
     public static function create()
     {
-
         return view('posts.create');
     }
 
     public static function store(StorePost $request)
     {
-        $validatedData = $request->validated();
+        $attributes = $request->validated();
 
-        $post = Post::create(request()->all());
+        $post = Post::create($attributes);
+
+        $tagsToAttach = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
+
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $post->tags()->attach($tag);
+        }
 
         return redirect('/');
     }
@@ -46,6 +53,22 @@ class PostsController extends Controller
         $attributes = $request->validated();
         $attributes['published'] = isset($attributes['published']) ? true : false;
         $post->update($attributes);
+
+        $postTags = $post->tags->keyBy('name');
+        $tags = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
+
+        $tagsToAttach = $tags->diffKeys($postTags);
+        $tagsToDetach = $postTags->diffKeys($tags);
+
+
+        foreach ($tagsToAttach as $tag) {
+            $tag = Tag::firstOrCreate(['name' => $tag]);
+            $post->tags()->attach($tag);
+        }
+
+        foreach ($tagsToDetach as $tag) {
+            $post->tags()->detach($tag);
+        }
 
         return redirect('/');
     }
