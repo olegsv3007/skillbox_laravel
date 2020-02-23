@@ -10,5 +10,10 @@
 <p>{{ $post->body }}</p>
 <hr>
 <a href="/" class="btn btn-secondary">Вернуться на главную</a>
-
+<a href="/posts/{{ $post->slug }}/edit" class="btn btn-warning">Редактировать</a>
+<form action="/posts/{{ $post->slug }}" method="post" class="mt-3">
+    @csrf
+    @method('DELETE')
+    <button type="submit" class="btn btn-danger">Удалить</button>
+</form>
 @endsection

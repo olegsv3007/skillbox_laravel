@@ -14,6 +14,11 @@ class PostsController extends Controller
         return view('posts.index', compact('posts'));
     }
 
+    public static function show(Post $post)
+    {
+        return view('posts.show', compact('post'));
+    }
+
     public static function create()
     {
         return view('posts.create');
@@ -28,8 +33,24 @@ class PostsController extends Controller
         return redirect('/');
     }
 
-    public static function show(Post $post)
+    public function edit(Post $post)
     {
-        return view('posts.show', compact('post'));   
+        return view('posts.edit', compact('post'));
+    }
+
+    public function update(Post $post, StorePost $request)
+    {
+        $attributes = $request->validated();
+        $attributes['published'] = isset($attributes['published']) ? true : false;
+        $post->update($attributes);
+
+        return redirect('/');
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+
+        return redirect('/');
     }
 }

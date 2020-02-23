@@ -4,9 +4,7 @@ use App\Http\Controllers;
 
 Route::get('/', 'PostsController@index');
 
-Route::get('/posts/create', 'PostsController@create');
-Route::post('/posts', 'PostsController@store');
-Route::get('/posts/{post}', "PostsController@show");
+Route::resource('posts', 'PostsController');
 
 Route::get('/contacts', function () {
     return view('contacts.index');
