@@ -16,11 +16,7 @@ class StorePost extends FormRequest
     {
         $post = $this->route('post');
         return [
-            'slug' => [
-                'required',
-                'regex:/([A-Za-z0-9-_]+)/',
-                Rule::unique('posts')->ignore($post->id),
-            ],
+            'slug' => 'required|unique:posts|regex:/([A-Za-z0-9-_]+)/',
             'name' => 'required|min:5|max:100',
             'announce' => 'required|min:5|max:255',
             'body' => 'required',

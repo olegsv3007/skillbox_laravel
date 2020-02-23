@@ -2,10 +2,20 @@
 
 namespace App;
 
+use App\Events\PostCreate;
+use App\Events\PostDelete;
+use App\Events\PostUpdate;
+
 class Post extends Model
 {
     protected $casts = [
         'published' => 'boolean',
+    ];
+
+    protected $dispatchesEvents = [
+        'created' => PostCreate::class,
+        'updated' => PostUpdate::class,
+        'deleted' => PostDelete::class,
     ];
 
     public function getRouteKeyName()

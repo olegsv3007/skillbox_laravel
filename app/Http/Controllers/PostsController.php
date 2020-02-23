@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCreated;
+use App\Http\Requests\UpdatePost;
 use Illuminate\Http\Request;
 use App\Post;
 use App\Http\Requests\StorePost;
@@ -21,6 +23,7 @@ class PostsController extends Controller
 
     public static function create()
     {
+
         return view('posts.create');
     }
 
@@ -28,7 +31,7 @@ class PostsController extends Controller
     {
         $validatedData = $request->validated();
 
-        Post::create(request()->all());
+        $post = Post::create(request()->all());
 
         return redirect('/');
     }
@@ -38,7 +41,7 @@ class PostsController extends Controller
         return view('posts.edit', compact('post'));
     }
 
-    public function update(Post $post, StorePost $request)
+    public function update(Post $post, UpdatePost $request)
     {
         $attributes = $request->validated();
         $attributes['published'] = isset($attributes['published']) ? true : false;
