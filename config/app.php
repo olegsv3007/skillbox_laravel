@@ -229,4 +229,5 @@ return [
 
     ],
 
+    'admin_email' => 'olegsv007@yandex.ru',
 ];

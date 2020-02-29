@@ -32,4 +32,9 @@ class Post extends Model
     {
         return $this->belongsToMany('App\Tag', 'tag_post');
     }
+
+    public function owner()
+    {
+        return $this->hasOne('App\User', 'owner_id');
+    }
 }

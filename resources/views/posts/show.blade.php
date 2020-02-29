@@ -11,10 +11,12 @@
 <p>{{ $post->body }}</p>
 <hr>
 <a href="/" class="btn btn-secondary">Вернуться на главную</a>
+@can('update', $post)
 <a href="/posts/{{ $post->slug }}/edit" class="btn btn-warning">Редактировать</a>
 <form action="/posts/{{ $post->slug }}" method="post" class="mt-3">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">Удалить</button>
 </form>
+@endcan
 @endsection

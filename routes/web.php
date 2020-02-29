@@ -18,3 +18,5 @@ Route::get('/admin/feedbacks', 'FeedbacksController@index');
 Route::get('/about', function () {
     return view('about');
 });
+
+Route::auth();
