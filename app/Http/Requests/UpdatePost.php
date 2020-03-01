@@ -5,13 +5,8 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdatePost extends FormRequest
+class UpdatePost extends StorePost
 {
-    public function authorize()
-    {
-        return true;
-    }
-
     public function rules()
     {
         $post = $this->route('post');

@@ -37,6 +37,7 @@ class PostsController extends Controller
     {
         $attributes = $request->validated();
         $attributes['owner_id'] = auth()->id();
+        $attributes['published'] = isset($attributes['published']);
 
         $post = Post::create($attributes);
 
@@ -58,7 +59,7 @@ class PostsController extends Controller
     public function update(Post $post, UpdatePost $request)
     {
         $attributes = $request->validated();
-        $attributes['published'] = isset($attributes['published']) ? true : false;
+        $attributes['published'] = isset($attributes['published']);
         $post->update($attributes);
 
         $postTags = $post->tags->keyBy('name');

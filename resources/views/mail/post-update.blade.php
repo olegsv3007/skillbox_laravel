@@ -3,7 +3,7 @@
 
 Статья {{ $post->name }} была обновлена
 
-@component('mail::button', ['url' => "http://192.168.100.12/posts/$post->slug"])
+@component('mail::button', ['url' => $app['url']->to('/') . "/posts/$post->slug"])
 Button Text
 @endcomponent
 
