@@ -14,7 +14,7 @@ class PostsController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
-        $this->middleware('can:update,post')->except(['index', 'show', 'create', 'store']);
+        $this->middleware('can:update,post')->only(['edit', 'update', 'destroy']);
     }
 
     public static function index()
@@ -33,7 +33,7 @@ class PostsController extends Controller
         return view('posts.create');
     }
 
-    public static function store(StorePost $request)
+    public static function store(StorePost $request, \App\Service\PushAll $pushAll)
     {
         $attributes = $request->validated();
         $attributes['owner_id'] = auth()->id();
@@ -47,6 +47,8 @@ class PostsController extends Controller
             $tag = Tag::firstOrCreate(['name' => $tag]);
             $post->tags()->attach($tag);
         }
+
+        $pushAll->send('Ура!', 'Статья успешно создана!');
 
         return redirect('/');
     }
@@ -86,5 +88,16 @@ class PostsController extends Controller
         $post->delete();
 
         return redirect('/');
+    }
+
+    public function adminIndex()
+    {
+        $posts = Post::all();
+        return view('admin.posts.index', compact('posts'));
+    }
+
+    public function adminEdit(Post $post)
+    {
+        return view('admin.posts.edit', compact('post'));
     }
 }

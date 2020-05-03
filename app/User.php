@@ -41,4 +41,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Post', 'owner_id');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany('App\Role', 'user_role');
+    }
+
+    public function isAdmin()
+    {
+        return $this->roles->pluck('name')->contains('administrator');
+    }
 }

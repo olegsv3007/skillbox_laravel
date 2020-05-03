@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('layout.sidebar', function($view) {
             $view->with('tags', \App\Tag::tagsCloud());
         });
+
+        \Blade::if('admin', function() {
+            return auth()->check() && auth()->user()->isAdmin();
+        });
     }
 
     /**

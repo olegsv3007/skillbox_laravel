@@ -28,13 +28,18 @@ class Post extends Model
         return $query->where('published', '1');
     }
 
-    public function Tags()
+    public function tags()
     {
         return $this->belongsToMany('App\Tag', 'tag_post');
     }
 
     public function owner()
     {
-        return $this->hasOne('App\User', 'owner_id');
+        return $this->belongsTo('App\User', 'owner_id');
+    }
+
+    public function scopePeriod($query, $dateFrom, $dateTo)
+    {
+        return $query->whereBetween('created_at', [$dateFrom, $dateTo]);
     }
 }

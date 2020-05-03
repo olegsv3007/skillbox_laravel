@@ -12,11 +12,16 @@
 <hr>
 <a href="/" class="btn btn-secondary">Вернуться на главную</a>
 @can('update', $post)
+@admin
+<a href="/admin/posts/{{ $post->slug }}/edit" class="btn btn-outline-warning mb-2 mt-2">Редактировать в административном разделе</a>
+@else
 <a href="/posts/{{ $post->slug }}/edit" class="btn btn-warning">Редактировать</a>
 <form action="/posts/{{ $post->slug }}" method="post" class="mt-3">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">Удалить</button>
 </form>
+@endadmin
 @endcan
+
 @endsection

@@ -7,3 +7,9 @@
         <a class="p-2 text-muted" href="/admin/feedbacks">Администрирование</a>
     </nav>
 </div>
+<div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-between">
+        <a class="p-2 text-muted" href="/admin/feedbacks">Список сообщений</a>
+        <a class="p-2 text-muted" href="/admin/posts">Список статей</a>
+    </nav>
+</div>
