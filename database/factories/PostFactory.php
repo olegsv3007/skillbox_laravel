@@ -12,5 +12,6 @@ $factory->define(Post::class, function (Faker $faker) {
         'announce' => $faker->sentence,
         'body' => $faker->text(200),
         'published' => true,
+        'owner_id' => factory(\App\User::class),
     ];
 });

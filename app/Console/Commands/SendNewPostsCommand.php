@@ -3,7 +3,9 @@
 namespace App\Console\Commands;
 
 use App\Mail\SendNewPosts;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
+
 
 class SendNewPostsCommand extends Command
 {
@@ -18,11 +20,12 @@ class SendNewPostsCommand extends Command
 
     public function handle()
     {
-        $dateFrom = $this->argument('dateFrom') ?? date("Y-m-d H:i:s", time() - 7 * 24 * 60 * 60);
-        $dateTo = $this->argument('dateTo') ?? date("Y-m-d H:i:s", time());
+        $dateFrom = is_null($this->argument('dateFrom')) ? (new Carbon())->subWeek() : new Carbon($this->argument('dateFrom'));
+        $dateTo = is_null($this->argument('dateTo')) ? Carbon::now() : new Carbon($this->argument('dateTo'));
 
         $posts = \App\Post::period($dateFrom, $dateTo)->published()->get();
         $users = \App\User::all();
+
         foreach ($users as $user) {
             \Mail::to($user->email)->send(new SendNewPosts($posts));
         }
