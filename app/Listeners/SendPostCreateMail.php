@@ -11,6 +11,6 @@ class SendPostCreateMail
 {
     public function handle(PostCreate $event)
     {
-        \Mail::to(config("app.admin_email"))->send(new PostCreated($event->post));
+        //\Mail::to(config("app.admin_email"))->send(new PostCreated($event->post));
     }
 }

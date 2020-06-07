@@ -10,6 +10,7 @@ class TagsController extends Controller
     public function index(Tag $tag)
     {
         $posts = $tag->posts()->published()->latest()->get();
-        return view('posts.index', compact('posts'));
+        $allNews = $tag->news()->published()->latest()->get();
+        return view('tags', compact(['posts', 'allNews']));
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTagPostTable extends Migration
+class CreateTaggablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateTagPostTable extends Migration
      */
     public function up()
     {
-        Schema::create('tag_post', function (Blueprint $table) {
-            $table->unsignedBigInteger('post_id');
+        Schema::create('taggables', function (Blueprint $table) {
             $table->unsignedBigInteger('tag_id');
+            $table->morphs('taggable');
+            $table->primary(['tag_id', 'taggable_id', 'taggable_type']);
 
-            $table->primary(['post_id', 'tag_id']);
-
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
             $table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
         });
     }

@@ -10,7 +10,7 @@ $factory->define(Post::class, function (Faker $faker) {
         'name' => $faker->words(4, true),
         'slug' => $faker->unique()->slug,
         'announce' => $faker->sentence,
-        'body' => $faker->text(200),
+        'body' => $faker->realText(2000),
         'published' => true,
         'owner_id' => factory(\App\User::class),
     ];

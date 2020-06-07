@@ -14,11 +14,16 @@ class Tag extends \App\Model
 
     public function posts()
     {
-        return $this->belongsToMany('App\Post', 'tag_post');
+        return $this->morphedByMany('App\Post', 'taggable');
+    }
+
+    public function news()
+    {
+        return $this->morphedByMany('App\News', 'taggable');
     }
 
     public static function tagsCloud()
     {
-        return (new static)->has('posts')->get();
+        return (new static)->has('posts')->orHas('news')->get();
     }
 }

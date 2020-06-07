@@ -12,9 +12,10 @@ class TagToPostSeeder extends Seeder
         foreach ($posts as $post) {
             foreach ($tags as $tag) {
                 if (!rand(0, 4)) {
-                    DB::table('tag_post')->insert([
+                    DB::table('taggables')->insert([
                         'tag_id' => $tag,
-                        'post_id' => $post,
+                        'taggable_id' => $post,
+                        'taggable_type' => \App\Post::class,
                     ]);
                 }
             }

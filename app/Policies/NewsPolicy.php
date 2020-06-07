@@ -2,17 +2,17 @@
 
 namespace App\Policies;
 
-use App\Post;
+use App\News;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class PostPolicy
+class NewsPolicy
 {
     use HandlesAuthorization;
 
-    public function update(User $user, Post $post)
+    public function update()
     {
-        return ($post->owner_id == $user->id) || auth()->user()->isAdmin();
+        return auth()->user()->isAdmin();
     }
 
     public function sendComment()

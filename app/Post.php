@@ -18,6 +18,19 @@ class Post extends Model
         'deleted' => PostDelete::class,
     ];
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updating(function (Post $post) {
+            $fields = array_keys($post->getDirty());
+            $post->histories()->create([
+                'user_id'=> auth()->id(),
+                'fields' => json_encode($fields),
+            ]);
+        });
+    }
+
     public function getRouteKeyName()
     {
         return 'slug';
@@ -30,7 +43,7 @@ class Post extends Model
 
     public function tags()
     {
-        return $this->belongsToMany('App\Tag', 'tag_post');
+        return $this->morphToMany('App\Tag', 'taggable');
     }
 
     public function owner()
@@ -41,5 +54,15 @@ class Post extends Model
     public function scopePeriod($query, $dateFrom, $dateTo)
     {
         return $query->whereBetween('created_at', [$dateFrom, $dateTo]);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany('App\Comment', 'commentable');
+    }
+
+    public function histories()
+    {
+        return $this->hasMany(\App\PostHistory::class, 'post_id');
     }
 }

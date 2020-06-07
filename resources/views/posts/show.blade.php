@@ -4,7 +4,7 @@
 
 <br>
 <h2>{{ $post->name }}</h2>
-@each('posts.tag-link', $post->tags, 'tag')
+@each('layout.tag-link', $post->tags, 'tag')
 <p>{{ \Carbon\Carbon::parse($post->created_at)->format('d F Y') }}</p>
 <hr>
 <br>
@@ -23,5 +23,34 @@
 </form>
 @endadmin
 @endcan
+<br>
+<hr>
+<h2>История изменений</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th scope="col">Пользователь</th>
+        <th scope="col">Дата изменений</th>
+        <th scope="col">Поля</th>
+    </tr>
+    </thead>
+    <tbody>
+    @forelse($post->histories as $item)
+        <tr>
+            <th scope="col">{{ $item->user->name }}</th>
+            <th scope="col">{{ $item->created_at->diffForHumans() }}</th>
+            <th scope="col">{{ implode(json_decode($item->fields), ', ') }}</th>
+        </tr>
+    @empty
+        <tr>
+            <th class="text-center" scope="col" colspan="3">Нет изменений</th>
+        </tr>
+    @endforelse
+    </tbody>
+</table>
+<br>
+<hr>
+<h2>Комментарии</h2>
+@include('comments.comments', ['commentable' =>  $post])
 
 @endsection
