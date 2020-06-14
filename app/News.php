@@ -4,6 +4,8 @@ namespace App;
 
 class News extends Model
 {
+    use Taggable;
+
     protected $casts = [
         'published' => 'boolean',
     ];
@@ -16,11 +18,6 @@ class News extends Model
     public function scopePublished($query)
     {
         return $query->where('published', '1');
-    }
-
-    public function tags()
-    {
-        return $this->morphToMany('App\Tag', 'taggable');
     }
 
     public function comments()

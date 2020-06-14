@@ -8,6 +8,8 @@ use App\Events\PostUpdate;
 
 class Post extends Model
 {
+    use Taggable;
+
     protected $casts = [
         'published' => 'boolean',
     ];
@@ -39,11 +41,6 @@ class Post extends Model
     public function scopePublished($query)
     {
         return $query->where('published', '1');
-    }
-
-    public function tags()
-    {
-        return $this->morphToMany('App\Tag', 'taggable');
     }
 
     public function owner()

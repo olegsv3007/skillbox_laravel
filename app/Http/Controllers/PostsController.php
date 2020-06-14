@@ -40,13 +40,7 @@ class PostsController extends Controller
         $attributes['published'] = isset($attributes['published']);
 
         $post = Post::create($attributes);
-
-        $tagsToAttach = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
+        $post->syncTags(request('tags'));
 
         $pushAll->send('Ура!', 'Статья успешно создана!');
 
@@ -62,23 +56,9 @@ class PostsController extends Controller
     {
         $attributes = $request->validated();
         $attributes['published'] = isset($attributes['published']);
+
         $post->update($attributes);
-
-        $postTags = $post->tags->keyBy('name');
-        $tags = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
-
-        $tagsToAttach = $tags->diffKeys($postTags);
-        $tagsToDetach = $postTags->diffKeys($tags);
-
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $post->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $post->tags()->detach($tag);
-        }
+        $post->syncTags(request('tags'));
 
         return redirect('/');
     }
@@ -93,6 +73,7 @@ class PostsController extends Controller
     public function adminIndex()
     {
         $posts = Post::all();
+
         return view('admin.posts.index', compact('posts'));
     }
 

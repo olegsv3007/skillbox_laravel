@@ -32,13 +32,7 @@ class NewsController extends Controller
         $attributes = $request->validated();
 
         $news = News::create($attributes);
-
-        $tagsToAttach = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $news->tags()->attach($tag);
-        }
+        $news->syncTags(request('tags'));
 
         return redirect('/news');
     }
@@ -56,23 +50,9 @@ class NewsController extends Controller
     public function update(UpdateNews $request, News $news)
     {
         $attributes = $request->validated();
+
         $news->update($attributes);
-
-        $newsTags = $news->tags->keyBy('name');
-        $tags = collect(explode('|', request('tags')))->keyBy(function($item) { return $item; });
-
-        $tagsToAttach = $tags->diffKeys($newsTags);
-        $tagsToDetach = $newsTags->diffKeys($tags);
-
-
-        foreach ($tagsToAttach as $tag) {
-            $tag = Tag::firstOrCreate(['name' => $tag]);
-            $news->tags()->attach($tag);
-        }
-
-        foreach ($tagsToDetach as $tag) {
-            $news->tags()->detach($tag);
-        }
+        $news->syncTags(request('tags'));
 
         return redirect('/news');
     }
