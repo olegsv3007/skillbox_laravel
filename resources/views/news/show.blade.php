@@ -10,11 +10,11 @@
 <br>
 <p>{{ $news->body }}</p>
 <hr>
-<a href="/news" class="btn btn-secondary">Вернуться к новостям</a>
+<a href="{{ route('news.index') }}" class="btn btn-secondary">Вернуться к новостям</a>
 
 @admin
-<a href="/news/{{ $news->slug }}/edit" class="btn btn-outline-warning mb-2 mt-2">Редактировать в административном разделе</a>
-<form action="/news/{{ $news->slug }}" method="post" class="mt-3">
+<a href="{{ route('news.edit', ['news' => $news->slug]) }}" class="btn btn-outline-warning mb-2 mt-2">Редактировать в административном разделе</a>
+<form action="{{ route('news.destroy', ['news' => $news->slug]) }}" method="post" class="mt-3">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">Удалить</button>

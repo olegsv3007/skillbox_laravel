@@ -10,13 +10,13 @@
 <br>
 <p>{{ $post->body }}</p>
 <hr>
-<a href="/" class="btn btn-secondary">Вернуться на главную</a>
+<a href="{{ route('posts.index') }}" class="btn btn-secondary">Вернуться на главную</a>
 @can('update', $post)
 @admin
-<a href="/admin/posts/{{ $post->slug }}/edit" class="btn btn-outline-warning mb-2 mt-2">Редактировать в административном разделе</a>
+<a href="{{ route('admin.posts.edit', ['post' => $post->slug]) }}" class="btn btn-outline-warning mb-2 mt-2">Редактировать в административном разделе</a>
 @else
-<a href="/posts/{{ $post->slug }}/edit" class="btn btn-warning">Редактировать</a>
-<form action="/posts/{{ $post->slug }}" method="post" class="mt-3">
+<a href="{{ route('posts.edit', ['post' => $post->slug]) }}" class="btn btn-warning">Редактировать</a>
+<form action="{{ route('posts.destroy', ['post' => $post->slug]) }}" method="post" class="mt-3">
     @csrf
     @method('DELETE')
     <button type="submit" class="btn btn-danger">Удалить</button>

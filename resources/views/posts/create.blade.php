@@ -5,7 +5,7 @@
 <h2>Создание статьи</h2>
 <hr>
 @include('layout.errors')
-<form action="/posts" method="post">
+<form action="{{ route('posts.store') }}" method="post">
     @csrf
     @include('posts.form')
 </form>

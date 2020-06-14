@@ -1,1 +1,1 @@
-<a href="/tags/{{ $tag->name }}" class="badge badge-secondary">{{ $tag->name }}</a>
+<a href="{{ route('tags.index', ['tag' => $tag->name]) }}" class="badge badge-secondary">{{ $tag->name }}</a>

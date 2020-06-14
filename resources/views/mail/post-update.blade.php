@@ -3,7 +3,7 @@
 
 Статья {{ $post->name }} была обновлена
 
-@component('mail::button', ['url' => $app['url']->to('/') . "/posts/$post->slug"])
+@component('mail::button', ['url' => route('posts.show', ['post' => $post->slug])])
 Button Text
 @endcomponent
 

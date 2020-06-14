@@ -4,7 +4,7 @@
 У нас появились новые статьи:
 <br>
 @foreach($posts as $post)
-@component('mail::button', ['url' => $app['url']->to('/') . "/posts/$post->slug"])
+@component('mail::button', ['url' => route('posts.show', ['post' => $post->slug])])
     {{ $post->name }}
 @endcomponent
 <hr>

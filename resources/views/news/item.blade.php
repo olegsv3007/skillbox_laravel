@@ -5,6 +5,6 @@
 
     <p class="blog-post-meta">{{ \Carbon\Carbon::parse($news->created_at)->format('d F Y') }}
     <p>{{ $news->announce }}</p>
-    <a class="btn btn-secondary" href="/news/{{ $news->slug }}">Читать далее...</a></p>
+    <a class="btn btn-secondary" href="{{ route('news.show', ['news' => $news->slug]) }}">Читать далее...</a></p>
     <hr>
 </div>

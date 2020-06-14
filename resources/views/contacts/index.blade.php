@@ -8,7 +8,7 @@
 <br>
 <h3>Обратная связь</h3>
 @include('layout.errors')
-<form method="post" action="/contacts">
+<form method="post" action="{{ route('feedback.send') }}">
     @csrf
   <div class="form-group">
     <label for="exampleInputEmail1">Email адрес:</label>

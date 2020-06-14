@@ -5,7 +5,7 @@
     <h2>Изменение статьи</h2>
     <hr>
     @include('layout.errors')
-    <form action="/admin/posts/{{ $post->slug }}" method="post">
+    <form action="{{ route('admin.posts.update', ['post' => $post->slug]) }}" method="post">
         @csrf
         @method('PUT')
         @include('posts.form')
