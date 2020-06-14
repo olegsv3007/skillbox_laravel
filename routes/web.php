@@ -10,7 +10,9 @@ Route::resource('/posts', 'PostsController');
 
 Route::resource('/news', 'NewsController');
 
-Route::post('/comments', 'CommentsController@send')->name('comment.send');
+Route::post('/posts/{post}/comments', 'PostsController@sendComment')->name('posts.comment.send');
+
+Route::post('/news/{news}/comments', 'NewsController@sendComment')->name('news.comment.send');
 
 Route::get('/contacts', function () {
     return view('contacts.index');

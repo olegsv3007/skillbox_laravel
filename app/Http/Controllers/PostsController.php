@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
 use App\Events\PostCreated;
+use App\Http\Requests\StoreComment;
 use App\Http\Requests\UpdatePost;
+use App\News;
 use App\Tag;
 use Illuminate\Http\Request;
 use App\Post;
@@ -80,5 +83,17 @@ class PostsController extends Controller
     public function adminEdit(Post $post)
     {
         return view('admin.posts.edit', compact('post'));
+    }
+
+    public function sendComment(Post $post, StoreComment $request)
+    {
+        $attributes = $request->validated();
+        $attributes['author_id'] = auth()->id();
+        $attributes['commentable_id'] = $post->id;
+        $attributes['commentable_type'] = Post::class;
+
+        Comment::create($attributes);
+
+        return redirect()->back();
     }
 }

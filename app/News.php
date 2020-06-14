@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Http\Requests\StoreComment;
+
 class News extends Model
 {
     use Taggable;

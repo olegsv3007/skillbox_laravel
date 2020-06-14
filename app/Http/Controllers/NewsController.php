@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Comment;
+use App\Http\Requests\StoreComment;
 use App\Http\Requests\StoreNews;
 use App\Http\Requests\UpdateNews;
 use App\News;
@@ -61,5 +63,17 @@ class NewsController extends Controller
     {
         $news->delete();
         return redirect('/news');
+    }
+
+    public function sendComment(News $news, StoreComment $request)
+    {
+        $attributes = $request->validated();
+        $attributes['author_id'] = auth()->id();
+        $attributes['commentable_id'] = $news->id;
+        $attributes['commentable_type'] = News::class;
+
+        Comment::create($attributes);
+
+        return redirect()->back();
     }
 }

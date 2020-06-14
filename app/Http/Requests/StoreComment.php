@@ -15,8 +15,6 @@ class StoreComment extends FormRequest
     {
         return [
             'body' => 'required',
-            'commentable_id' => 'required',
-            'commentable_type' => 'required',
         ];
     }
 }
