@@ -52,5 +52,5 @@
 <hr>
 <h2>Комментарии</h2>
 @include('comments.comments', ['commentable' =>  $post])
-
+@include('comments.comment_form', ['url' => route('posts.comment.send', ['post' => $post->slug])])
 @endsection

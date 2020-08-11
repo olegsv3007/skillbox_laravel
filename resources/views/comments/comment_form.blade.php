@@ -1,9 +1,5 @@
 @include('layout.errors')
-@if(get_class($commentable) == 'App\News')
-<form method="post" action="{{ route('news.comment.send', ['news' => $commentable->slug]) }}">
-@elseif(get_class($commentable) == 'App\Post')
-<form method="post" action="{{ route('posts.comment.send', ['post' => $commentable->slug]) }}">
-@endif
+<form method="post" action="{{ $url }}">
     @csrf
     <div class="form-group">
         <label for="comment">Написать комментарий</label>

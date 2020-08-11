@@ -24,4 +24,5 @@
 <hr>
 <h2>Комментарии</h2>
 @include('comments.comments', ['commentable' =>  $news])
+@include('comments.comment_form', ['url' => route('news.comment.send', ['news' => $news->slug])])
 @endsection

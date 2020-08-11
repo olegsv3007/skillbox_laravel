@@ -4,5 +4,4 @@
 @can('sendComment', $commentable)
     <hr>
     <br>
-    @include('comments.comment_form', ['commentable' => $commentable])
 @endcan
