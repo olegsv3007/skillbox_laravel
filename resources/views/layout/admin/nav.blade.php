@@ -14,5 +14,6 @@
         <a class="p-2 text-muted" href="{{ route('admin.posts.index') }}">Список статей</a>
         <a class="p-2 text-muted" href="{{ route('news.create') }}">Создать новость</a>
         <a class="p-2 text-muted" href="{{ route('statistics') }}">Статистика</a>
+        <a class="p-2 text-muted" href="{{ route('reports') }}">Отчеты</a>
     </nav>
 </div>
