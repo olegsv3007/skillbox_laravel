@@ -13,10 +13,12 @@ class SummaryReport implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $params;
+    public $email;
 
-    public function __construct($params)
+    public function __construct($params, $email)
     {
         $this->params = $params;
+        $this->email = $email;
     }
 
     public function handle()
@@ -37,6 +39,6 @@ class SummaryReport implements ShouldQueue
         if (in_array('users', $this->params)) {
             $reportData['Пользователи'] = \App\User::count();
         }
-        \Mail::to(auth()->user()->email)->send(new \App\Mail\SummaryReport($reportData));
+        \Mail::to($this->email)->send(new \App\Mail\SummaryReport($reportData));
     }
 }
