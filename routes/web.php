@@ -39,3 +39,7 @@ Route::middleware('auth.admin')->group(function () {
 });
 
 Route::auth();
+
+Route::middleware('web')->get('/api/userId', function (Request $request) {
+    return $request->user()->id;
+});

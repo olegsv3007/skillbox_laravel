@@ -60,8 +60,8 @@ class AdminController extends Controller
 
     public function sendSummaryReport(Request $request)
     {
-        \App\Jobs\SummaryReport::dispatch($request['params'], auth()->user()->email)
+        \App\Jobs\SummaryReport::dispatch($request['params'], auth()->user()->email, auth()->id())
             ->onQueue('reports');
-        return redirect()->back();
+        return view('admin.report-summary');
     }
 }

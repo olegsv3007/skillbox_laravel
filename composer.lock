@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6bb36a12a83350b6b7c544d45672574",
+    "content-hash": "7642862e149b1c64a6e025bb72bfdfd1",
     "packages": [
         {
             "name": "brick/math",

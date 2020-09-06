@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\SummaryReportReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,11 +15,13 @@ class SummaryReport implements ShouldQueue
 
     public $params;
     public $email;
+    public $userId;
 
-    public function __construct($params, $email)
+    public function __construct($params, $email, $userId)
     {
         $this->params = $params;
         $this->email = $email;
+        $this->userId = $userId;
     }
 
     public function handle()
@@ -39,6 +42,8 @@ class SummaryReport implements ShouldQueue
         if (in_array('users', $this->params)) {
             $reportData['Пользователи'] = \App\User::count();
         }
+
+        event(new SummaryReportReady($reportData, $this->userId));
         \Mail::to($this->email)->send(new \App\Mail\SummaryReport($reportData));
     }
 }
