@@ -9,7 +9,9 @@ class FeedbacksController extends Controller
 {
     public static function index()
     {
-        $feedbacks = Feedback::latest()->get();
+        $feedbacks = \Cache::rememberForever('feedbacks', function() {
+            return Feedback::latest()->get();
+        });
 
         return view("admin.feedbacks.index", compact('feedbacks'));
     }
@@ -22,6 +24,7 @@ class FeedbacksController extends Controller
         ]);
 
         Feedback::create(request()->all());
+        \Cache::forget('feedbacks');
 
         return redirect('/contacts');
     }

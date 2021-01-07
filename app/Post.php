@@ -31,6 +31,32 @@ class Post extends Model
                 'fields' => json_encode($fields),
             ]);
         });
+
+        static::created(function() {
+            \Cache::forget('posts');
+            \Cache::tags('stats')->forget('posts_quantity');
+            \Cache::tags('stats')->forget('top_author');
+            \Cache::tags('stats')->forget('max_length_post');
+            \Cache::tags('stats')->forget('min_length_post');
+            \Cache::tags('stats')->forget('avg_posts_per_user');
+            \Cache::tags('stats')->forget('all_posts');
+        });
+        static::updated(function() {
+            \Cache::forget('posts');
+            \Cache::tags('stats')->forget('max_length_post');
+            \Cache::tags('stats')->forget('min_length_post');
+            \Cache::tags('stats')->forget('unstable_post');
+        });
+        static::deleted(function() {
+            \Cache::forget('posts');
+            \Cache::tags('stats')->forget('posts_quantity');
+            \Cache::tags('stats')->forget('top_author');
+            \Cache::tags('stats')->forget('max_length_post');
+            \Cache::tags('stats')->forget('min_length_post');
+            \Cache::tags('stats')->forget('avg_posts_per_user');
+            \Cache::tags('stats')->forget('most_popular_post');
+            \Cache::tags('stats')->forget('all_posts');
+        });
     }
 
     public function getRouteKeyName()

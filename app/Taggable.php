@@ -20,10 +20,19 @@ trait Taggable
         foreach ($tagsToAttach as $tag) {
             $tag = Tag::firstOrCreate(['name' => $tag]);
             $this->tags()->attach($tag);
+            \Cache::tags('news_for_tag')->forget('news_for_tag_' . $tag->name);
+            \Cache::tags('posts_for_tag')->forget('posts_for_tag_' . $tag->name);
         }
 
         foreach ($tagsToDetach as $tag) {
             $this->tags()->detach($tag);
+            \Cache::tags('news_for_tag')->forget('news_for_tag_' . $tag->name);
+            \Cache::tags('posts_for_tag')->forget('posts_for_tag_' . $tag->name);
+        }
+
+        if ($tagsToAttach->isNotEmpty() || $tagsToDetach->isNotEmpty()) {
+            \Cache::forget('tagsCloud');
+            \Cache::forget('posts');
         }
     }
 }

@@ -17,6 +17,23 @@ class News extends Model
         return 'slug';
     }
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function() {
+            \Cache::forget('news');
+            \Cache::tags('stats')->forget('news_quantity');
+        });
+        static::updated(function() {
+            \Cache::forget('news');
+        });
+        static::deleted(function() {
+            \Cache::forget('news');
+            \Cache::tags('stats')->forget('news_quantity');
+        });
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', '1');

@@ -12,6 +12,15 @@ class Tag extends \App\Model
         return 'name';
     }
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::created(function() {
+            \Cache::forget('tagsCloud');
+        });
+    }
+
     public function posts()
     {
         return $this->morphedByMany('App\Post', 'taggable');
