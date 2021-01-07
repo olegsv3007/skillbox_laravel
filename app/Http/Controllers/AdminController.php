@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth.admin');
+    }
+
     public function statistics()
     {
         $data['posts_quantity'] = \App\Post::count();
@@ -40,5 +45,23 @@ class AdminController extends Controller
             ->first();
 
         return view('admin.statistics', compact('data'));
+    }
+
+    public function reports()
+    {
+        return view('admin.reports');
+    }
+
+    //tmp
+    public function summary(Request $request)
+    {
+        return view('admin.summary');
+    }
+
+    public function sendSummaryReport(Request $request)
+    {
+        \App\Jobs\SummaryReport::dispatch($request['params'], auth()->user()->email, auth()->id())
+            ->onQueue('reports');
+        return view('admin.report-summary');
     }
 }

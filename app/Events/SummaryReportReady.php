@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Post;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,23 +10,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class PostUpdate implements ShouldBroadcast
+class SummaryReportReady implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $post;
-    public $fields;
-    public $url;
+    public $reportData;
+    public $userId;
 
-    public function __construct(Post $post)
+    public function __construct($reportData, $userId)
     {
-        $this->post = $post;
-        $this->fields = array_keys($post->getDirty());
-        $this->url = route('posts.show', ['post' => $post->slug]);
+        $this->reportData = $reportData;
+        $this->userId = $userId;
     }
 
-    public function BroadcastOn()
+    public function broadcastOn()
     {
-        return new PrivateChannel('admin-notification');
+        return new PrivateChannel('report.' . $this->userId);
     }
 }

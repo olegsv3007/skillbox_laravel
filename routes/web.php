@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers;
+use Illuminate\Http\Request;
 
 Route::get('/', 'PostsController@index')->name('index');
 
@@ -25,6 +26,10 @@ Route::get('/about', function () {
 })->name('about');
 
 Route::get('/admin/statistics', 'AdminController@statistics')->name('statistics');
+Route::get('/admin/reports', 'AdminController@reports')->name('reports');
+Route::get('/admin/reports/summary', 'AdminController@summary')->name('summary');
+
+Route::post('/admin/reports/summary', 'AdminController@sendSummaryReport')->name('report-summary');
 
 Route::middleware('auth.admin')->group(function () {
     Route::get('/admin/feedbacks', 'FeedbacksController@index')->name('admin.feedbacks');
@@ -34,3 +39,7 @@ Route::middleware('auth.admin')->group(function () {
 });
 
 Route::auth();
+
+Route::middleware('web')->get('/api/userId', function (Request $request) {
+    return $request->user()->id;
+});
