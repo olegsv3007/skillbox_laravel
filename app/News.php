@@ -25,12 +25,14 @@ class News extends Model
             \Cache::forget('news');
             \Cache::tags('stats')->forget('news_quantity');
         });
-        static::updated(function() {
+        static::updated(function($model) {
             \Cache::forget('news');
+            \Cache::tags('detail_news')->forget('news_' . $model->slug);
         });
-        static::deleted(function() {
+        static::deleted(function($model) {
             \Cache::forget('news');
             \Cache::tags('stats')->forget('news_quantity');
+            \Cache::tags('detail_news')->forget('news_' . $model->slug);
         });
     }
 

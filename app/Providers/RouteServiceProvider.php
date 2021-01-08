@@ -24,6 +24,17 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        Route::bind('news', function($newsSlug) {
+            return \Cache::tags('detail_news')->remember('news_' . $newsSlug, now()->addHour(), function() use($newsSlug) {
+                return \App\News::where('slug', $newsSlug)->firstOrFail();
+            });
+        });
+
+        Route::bind('post', function($postSlug) {
+            return \Cache::tags('detail_posts')->remember('post_' . $postSlug, now()->addHour(), function() use($postSlug) {
+                return \App\Post::where('slug', $postSlug)->firstOrFail();
+            });
+        });
 
         parent::boot();
     }
