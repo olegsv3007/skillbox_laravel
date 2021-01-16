@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tag extends \App\Model
 {
+    use Cacheable;
+
+    public static $tagCache = 'tags';
 
     public function getRouteKeyName()
     {
@@ -15,10 +18,6 @@ class Tag extends \App\Model
     public static function boot()
     {
         parent::boot();
-
-        static::created(function() {
-            \Cache::forget('tagsCloud');
-        });
     }
 
     public function posts()

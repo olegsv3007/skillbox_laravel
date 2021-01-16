@@ -63,7 +63,6 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        \Cache::tags('stats')->forget('avg_posts_per_user');
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

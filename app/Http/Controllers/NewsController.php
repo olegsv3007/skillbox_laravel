@@ -20,7 +20,7 @@ class NewsController extends Controller
 
     public function index()
     {
-        $allNews = \Cache::rememberForever('news', function() {
+        $allNews = \Cache::tags('news')->rememberForever('news', function() {
             return News::published()->latest()->get();
         });
 
@@ -44,10 +44,9 @@ class NewsController extends Controller
 
     public function show(News $news)
     {
-        $comments = \Cache::tags('news_comments')->rememberForever('comments_of_news_' . $news->id, function() use ($news) {
+        $comments = \Cache::tags('comments', 'news')->rememberForever('comments_of_news_' . $news->id, function() use ($news) {
             return $news->comments()->with('author')->get();
         });
-
         return view('news.show', compact(['news', 'comments']));
     }
 

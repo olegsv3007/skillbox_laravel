@@ -7,6 +7,9 @@ use App\Http\Requests\StoreComment;
 class News extends Model
 {
     use Taggable;
+    use Cacheable;
+
+    public static $tagCache = 'news';
 
     protected $casts = [
         'published' => 'boolean',
@@ -21,18 +24,8 @@ class News extends Model
     {
         parent::boot();
 
-        static::created(function() {
-            \Cache::forget('news');
-            \Cache::tags('stats')->forget('news_quantity');
-        });
-        static::updated(function($model) {
-            \Cache::forget('news');
-            \Cache::tags('detail_news')->forget('news_' . $model->slug);
-        });
-        static::deleted(function($model) {
-            \Cache::forget('news');
-            \Cache::tags('stats')->forget('news_quantity');
-            \Cache::tags('detail_news')->forget('news_' . $model->slug);
+        static::deleted(function() {
+            \Cache::tags('news', 'tags')->flush();
         });
     }
 

@@ -14,47 +14,47 @@ class AdminController extends Controller
 
     public function statistics()
     {
-        $data['posts_quantity'] = \Cache::tags('stats')->rememberForever('posts_quantity', function() {
+        $data['posts_quantity'] = \Cache::tags('posts')->rememberForever('posts_quantity', function() {
             return \App\Post::count();
         });
 
-        $data['news_quantity'] = \Cache::tags('stats')->rememberForever('news_quantity', function() {
+        $data['news_quantity'] = \Cache::tags('news')->rememberForever('news_quantity', function() {
             return \App\News::count();
         });
 
-        $data['top_author'] = \Cache::tags('stats')->rememberForever('top_author', function() {
+        $data['top_author'] = \Cache::tags('posts')->rememberForever('top_author', function() {
             return \App\User::withCount('posts')
                 ->orderBy('posts_count', 'desc')
                 ->first()
                 ->name;
         });
 
-        $data['max_length_post'] = \Cache::tags('stats')->rememberForever('max_length_post', function() {
+        $data['max_length_post'] = \Cache::tags('posts')->rememberForever('max_length_post', function() {
             return \App\Post::select('name', 'id', 'slug', \DB::raw('length(body) as length'))
                 ->orderBy('length', 'desc')
                 ->first();
         });
 
-        $data['min_length_post'] = \Cache::tags('stats')->rememberForever('min_length_post', function() {
+        $data['min_length_post'] = \Cache::tags('posts')->rememberForever('min_length_post', function() {
             return \App\Post::select('name', 'id', 'slug', \DB::raw('length(body) as length'))
                 ->orderBy('length', 'asc')
                 ->first();
         });
 
-        $data['avg_posts_per_user'] = \Cache::tags('stats')->rememberForever('avg_posts_per_user', function() {
+        $data['avg_posts_per_user'] = \Cache::tags('posts')->rememberForever('avg_posts_per_user', function() {
             return \App\User::whereHas('posts')
                 ->withCount('posts')
                 ->get()
                 ->avg('posts_count');
         });
 
-        $data['unstable_post'] = \Cache::tags('stats')->rememberForever('unstable_post', function() {
+        $data['unstable_post'] = \Cache::tags('posts')->rememberForever('unstable_post', function() {
             return \App\Post::withCount('histories')
                 ->orderBy('histories_count', 'desc')
                 ->first();
         });
 
-        $data['most_popular_post'] = \Cache::tags('stats')->rememberForever('most_popular_post', function() {
+        $data['most_popular_post'] = \Cache::tags('posts', 'comments')->rememberForever('most_popular_post', function() {
             return \App\Post::withCount('comments')
                 ->orderBy('comments_count', 'desc')
                 ->first();

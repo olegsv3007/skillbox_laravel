@@ -9,7 +9,7 @@ class FeedbacksController extends Controller
 {
     public static function index()
     {
-        $feedbacks = \Cache::rememberForever('feedbacks', function() {
+        $feedbacks = \Cache::tags('feedbacks')->rememberForever('feedbacks', function() {
             return Feedback::latest()->get();
         });
 
@@ -24,7 +24,6 @@ class FeedbacksController extends Controller
         ]);
 
         Feedback::create(request()->all());
-        \Cache::forget('feedbacks');
 
         return redirect('/contacts');
     }

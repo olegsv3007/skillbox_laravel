@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         view()->composer('layout.sidebar', function($view) {
-            $tags = \Cache::rememberForever('tagsCloud', function() {
+            $tags = \Cache::tags('tags')->rememberForever('tagsCloud', function() {
                 return \App\Tag::tagsCloud();
             });
             $view->with('tags', $tags);

@@ -22,7 +22,7 @@ class PostsController extends Controller
 
     public static function index()
     {
-        $posts = \Cache::rememberForever('posts', function () {
+        $posts = \Cache::tags('posts')->rememberForever('posts', function () {
             return Post::published()->latest()->with('tags')->get();
         });
 
@@ -31,11 +31,11 @@ class PostsController extends Controller
 
     public static function show(Post $post)
     {
-        $comments = \Cache::tags('post_comments')->remember('comments_of_post_' . $post->id, now()->addHour(), function() use ($post) {
+        $comments = \Cache::tags('posts', 'comments')->remember('comments_of_post_' . $post->id, now()->addHour(), function() use ($post) {
             return $post->comments()->with('author')->get();
         });
 
-        $histories = \Cache::tags('post_histories')->remember('histories_of_post_' . $post->id, now()->addHour(), function() use ($post) {
+        $histories = \Cache::tags('posts', 'histories')->remember('histories_of_post_' . $post->id, now()->addHour(), function() use ($post) {
             return $post->histories()->with('user')->get();
         });
 
@@ -86,7 +86,7 @@ class PostsController extends Controller
 
     public function adminIndex()
     {
-        $posts = \Cache::rememberForever('all_posts', function() {
+        $posts = \Cache::tags('posts')->rememberForever('all_posts', function() {
             return Post::all();
         });
 
@@ -106,7 +106,6 @@ class PostsController extends Controller
         $attributes['commentable_type'] = Post::class;
 
         Comment::create($attributes);
-        \Cache::tags('stats')->forget('most_popular_post');
 
         return redirect()->back();
     }

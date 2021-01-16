@@ -6,9 +6,13 @@ use App\Events\PostCreate;
 use App\Events\PostDelete;
 use App\Events\PostUpdate;
 
+
 class Post extends Model
 {
     use Taggable;
+    use Cacheable;
+
+    public static $tagCache = 'posts';
 
     protected $casts = [
         'published' => 'boolean',
@@ -32,32 +36,8 @@ class Post extends Model
             ]);
         });
 
-        static::created(function() {
-            \Cache::forget('posts');
-            \Cache::tags('stats')->forget('posts_quantity');
-            \Cache::tags('stats')->forget('top_author');
-            \Cache::tags('stats')->forget('max_length_post');
-            \Cache::tags('stats')->forget('min_length_post');
-            \Cache::tags('stats')->forget('avg_posts_per_user');
-            \Cache::tags('stats')->forget('all_posts');
-        });
-        static::updated(function($model) {
-            \Cache::forget('posts');
-            \Cache::tags('stats')->forget('max_length_post');
-            \Cache::tags('stats')->forget('min_length_post');
-            \Cache::tags('stats')->forget('unstable_post');
-            \Cache::tags('detail_posts')->forget('post_' . $model->slug);
-        });
-        static::deleted(function($model) {
-            \Cache::forget('posts');
-            \Cache::tags('stats')->forget('posts_quantity');
-            \Cache::tags('stats')->forget('top_author');
-            \Cache::tags('stats')->forget('max_length_post');
-            \Cache::tags('stats')->forget('min_length_post');
-            \Cache::tags('stats')->forget('avg_posts_per_user');
-            \Cache::tags('stats')->forget('most_popular_post');
-            \Cache::tags('stats')->forget('all_posts');
-            \Cache::tags('detail_posts')->forget('post_' . $model->slug);
+        static::deleted(function() {
+            \Cache::tags('posts', 'tags')->flush();
         });
     }
 
