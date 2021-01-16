@@ -35,7 +35,7 @@
     </tr>
     </thead>
     <tbody>
-    @forelse($post->histories as $item)
+    @forelse($histories as $item)
         <tr>
             <th scope="col">{{ $item->user->name }}</th>
             <th scope="col">{{ $item->created_at->diffForHumans() }}</th>
@@ -51,6 +51,6 @@
 <br>
 <hr>
 <h2>Комментарии</h2>
-@include('comments.comments', ['commentable' =>  $post])
+@include('comments.comments', ['comments' =>  $comments])
 @include('comments.comment_form', ['url' => route('posts.comment.send', ['post' => $post->slug])])
 @endsection

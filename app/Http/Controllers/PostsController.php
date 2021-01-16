@@ -22,13 +22,24 @@ class PostsController extends Controller
 
     public static function index()
     {
-        $posts = Post::published()->latest()->with('tags')->get();
+        $posts = \Cache::tags('posts')->rememberForever('posts', function () {
+            return Post::published()->latest()->with('tags')->get();
+        });
+
         return view('posts.index', compact('posts'));
     }
 
     public static function show(Post $post)
     {
-        return view('posts.show', compact('post'));
+        $comments = \Cache::tags('posts', 'comments')->remember('comments_of_post_' . $post->id, now()->addHour(), function() use ($post) {
+            return $post->comments()->with('author')->get();
+        });
+
+        $histories = \Cache::tags('posts', 'histories')->remember('histories_of_post_' . $post->id, now()->addHour(), function() use ($post) {
+            return $post->histories()->with('user')->get();
+        });
+
+        return view('posts.show', compact(['post', 'comments', 'histories']));
     }
 
     public static function create()
@@ -75,7 +86,9 @@ class PostsController extends Controller
 
     public function adminIndex()
     {
-        $posts = Post::all();
+        $posts = \Cache::tags('posts')->rememberForever('all_posts', function() {
+            return Post::all();
+        });
 
         return view('admin.posts.index', compact('posts'));
     }

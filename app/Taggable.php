@@ -25,5 +25,9 @@ trait Taggable
         foreach ($tagsToDetach as $tag) {
             $this->tags()->detach($tag);
         }
+
+        if ($tagsToAttach->isNotEmpty() || $tagsToDetach->isNotEmpty()) {
+            \Cache::tags('news', 'posts', 'tags')->flush();
+        }
     }
 }

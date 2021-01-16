@@ -9,7 +9,9 @@ class FeedbacksController extends Controller
 {
     public static function index()
     {
-        $feedbacks = Feedback::latest()->get();
+        $feedbacks = \Cache::tags('feedbacks')->rememberForever('feedbacks', function() {
+            return Feedback::latest()->get();
+        });
 
         return view("admin.feedbacks.index", compact('feedbacks'));
     }

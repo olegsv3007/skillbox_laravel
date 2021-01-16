@@ -14,7 +14,10 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         view()->composer('layout.sidebar', function($view) {
-            $view->with('tags', \App\Tag::tagsCloud());
+            $tags = \Cache::tags('tags')->rememberForever('tagsCloud', function() {
+                return \App\Tag::tagsCloud();
+            });
+            $view->with('tags', $tags);
         });
 
         \Blade::if('admin', function() {

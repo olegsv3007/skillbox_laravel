@@ -6,9 +6,13 @@ use App\Events\PostCreate;
 use App\Events\PostDelete;
 use App\Events\PostUpdate;
 
+
 class Post extends Model
 {
     use Taggable;
+    use Cacheable;
+
+    public static $tagCache = 'posts';
 
     protected $casts = [
         'published' => 'boolean',
@@ -30,6 +34,10 @@ class Post extends Model
                 'user_id'=> auth()->id(),
                 'fields' => json_encode($fields),
             ]);
+        });
+
+        static::deleted(function() {
+            \Cache::tags('posts', 'tags')->flush();
         });
     }
 

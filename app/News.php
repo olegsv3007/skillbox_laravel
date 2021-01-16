@@ -7,6 +7,9 @@ use App\Http\Requests\StoreComment;
 class News extends Model
 {
     use Taggable;
+    use Cacheable;
+
+    public static $tagCache = 'news';
 
     protected $casts = [
         'published' => 'boolean',
@@ -15,6 +18,15 @@ class News extends Model
     public function getRouteKeyName()
     {
         return 'slug';
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function() {
+            \Cache::tags('news', 'tags')->flush();
+        });
     }
 
     public function scopePublished($query)
